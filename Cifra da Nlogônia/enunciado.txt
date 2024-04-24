@@ -1,0 +1,131 @@
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+
+A - 4 -> E
+
+E - 3 -> I
+
+I - 5 -> O
+
+O - 5 -> U
+
+CASA
+
+C -> Consoante original
+A -> Vogal mais próxima da consoante e do início do alfabeto
+D -> Consoante que segue a Consoante original
+
+A -> Vogal
+
+S -> Consoante original
+U -> Vogal mais próxima da consoante
+T -> Consoante que segue a Consoante original
+
+A -> Vogal
+
+casa -> cadsut (cad-a-sut-a)
+ter -> tuveros (tuv-e-ros)
+
+Rodar o alfabeto *
+Encontrar a Consoante Original *
+Adicionar a vogal mais próxima da Consoante original
+
+	A < T: V e E > T: F
+	E < T: V e I > T: F
+	I < T: V e O > T: F
+	O < T: V e U > T: V
+	Letra += O	
+
+Se Vogal for Menor que a Consoante Original E a próxima Vogal Maior que a Consoante Original
+	Letra += vogal
+
+
+alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+vowels = ['a', 'e', 'i', 'o', 'u']
+
+#word = input("Digite uma palavra para ser cifrada: ")
+word = "ter"
+word_letter = []
+
+def returnLen(x):
+    len = 0
+    for _ in x:
+        len += 1
+    return len
+
+len_alp = returnLen(alphabet)
+len_vow = returnLen(vowels)
+len_wltt = returnLen(word)
+
+# Armazenando as vogais da palavra
+def returnWordVowels():
+    word_vowels = []
+    for i in range(len_wltt):
+        if word[i] in vowels:
+            word_vowels.append(word[i])
+    return word_vowels
+
+word_vowels = returnWordVowels()
+
+len_wvw = returnLen(word_vowels)
+
+for letter in word:
+    for i in range(len_wvw):
+        if letter != word_vowels[i]:
+            word_letter.append(letter)
+
+# Adicionando consoante original
+# def returnOriginalConsonant() -> list:
+#     original_consonant = []
+#     for i in range(len_wltt):
+#         original_consonant.append(word_letter[i])
+#     return original_consonant
+
+#Retornando o index equivalente da consoante original no alfabeto
+def returnIndex(element: list, len: int):
+    InOriginal_consonant = []
+
+    for i in range(len):
+        count = 0
+        for i2 in range(len_alp):
+            if alphabet[i2] != element[i]:
+                count += 1
+            else:
+                break
+        InOriginal_consonant.append(count)
+
+    return InOriginal_consonant
+
+original_consonant = word_letter
+len_orCnsnt = returnLen(original_consonant)
+
+InOriginal_consonant = returnIndex(original_consonant, len_orCnsnt)
+print(InOriginal_consonant)
+
+len_InOrCnsnt = returnLen(InOriginal_consonant)
+
+# Construindo a cifra
+nextVowel = ""
+cipher = ""
+temp = " "
+
+while cipher != temp:
+    for i in range(len_orCnsnt):
+        temp = ""
+        print(original_consonant[i])
+        for i3 in range(len_wvw):
+            temp += word_vowels[i3]
+            for i2 in range(len_vow):
+                if original_consonant[i] in alphabet:
+                    if vowels[i2] < original_consonant[i] and vowels[i2+1] > original_consonant[i]:
+                        nextVowel = vowels[i2+1]
+                        temp += original_consonant[i] + vowels[i2] + alphabet[InOriginal_consonant[i]+1]
+                        if alphabet[InOriginal_consonant[i]+1] == nextVowel:
+                            temp = original_consonant[i]
+                            temp += nextVowel+alphabet[InOriginal_consonant[i]+2]
+        # for letter in temp:
+        #     cipher += letter
+        cipher += temp
+    break
+
+print(cipher)
+
